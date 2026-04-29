@@ -1,5 +1,20 @@
 [
-  { "id": "1", "text": "Aprender React" },
-  { "id": "2", "text": "Entender useState" },
-  { "id": "3", "text": "Crear componentes" }
+  {
+    "_id": "1",
+    "title": "Aprender React",
+    "desc": "Estudiar la teoría",
+    "isDone": false
+  },
+  {
+    "_id": "2",
+    "title": "Entender useState",
+    "desc": "Hacer varios ejemplos",
+    "isDone": false
+  },
+  {
+    "_id": "3",
+    "title": "Hacer Ejercicios",
+    "desc": "Aprender con la práctica",
+    "isDone": false
+  }
 ]
