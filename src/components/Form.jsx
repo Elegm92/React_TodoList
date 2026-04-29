@@ -1,40 +1,74 @@
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import todosData from "../datos.json";
 // import listado from './List'
 
 function Form() {
   const [input, setInput] = useState(""); //Empieza vacio. Guarda el texto const [input, setInput] = useState(""); //Empieza vacio. Guarda el texto
-  const [lista, setLista] = useState(todosData); //Guarda una lista y el array empieza vacio
+  const [lista, setLista] = useState([]); //Guarda una lista y el array empieza vacio
+  const [mensaje, setMensaje] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  useEffect(() => {
+    setLista(todosData);
+  }, []);
+
+  useEffect(() => {
+    if (input === "") return
+      const timer = setTimeout(() => {
+        setInput("");
+      }, 20000);
+      return () => clearTimeout(timer);
+    
+  }, [input]);
+
+  useEffect(()=>{
+    if(!mensaje) return
+    const timerMsj = setTimeout(() =>{
+      setMensaje(false)
+    },5000);
+    return()=> clearTimeout(timerMsj)
+  }, [mensaje])
+
+  const handleSubmit = (e) => {
+     e.preventDefault();
+    if(input.length < 6){ //Validamos la longitud
+      setError("Escribe al menos 6 caracteres")
+      return
+    }
+    setError("")
     setLista((prev) => [...prev, { id: uuidv4(), text: input }]); //Añade la tarea a la lista. copia todo lo que ya había en la lista" y luego añade el input al final
     setInput(""); //Vacia el input
-  }
+    setMensaje(true); //Activamos el mensaje de añadido
+  };
 
-  function handleDelete(id) {
+  const handleDelete = (id) => {
     setLista((prev) => prev.filter((item) => item.id !== id));
-  }
-  function handleClear() {
+  };
+  const handleClear = () => {
     //Vacia el array y lo deja limpio por lo que el map no tiene nada que recorrer
     setLista([]);
-  }
+  };
 
-  function handleReset() {
+  const handleReset = () => {
     setLista(todosData);
-  }
+  };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Nueva tarea"
         />
-        <button type="submit">ADD</button>
+        <button type="submit" hidden={input === ""}>
+          ADD
+        </button>
       </form>
+
+        {error && <p className="error">{error}</p>}
+      
       <ul>
         {lista.map(
           (
@@ -47,8 +81,13 @@ function Form() {
           ),
         )}
       </ul>
-      <button onClick={handleClear}>CLEAR</button>
-      <button onClick={handleReset}>RESET</button>
+
+        {mensaje && <p className="mensaje">Tarea añadida</p>}
+
+      <div className="actions">
+        <button onClick={handleClear}>CLEAR</button>
+        <button onClick={handleReset}>RESET</button>
+      </div>
     </>
   );
 }
