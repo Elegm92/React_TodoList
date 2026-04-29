@@ -1,0 +1,5 @@
+[
+  { "id": "1", "text": "Aprender React" },
+  { "id": "2", "text": "Entender useState" },
+  { "id": "3", "text": "Crear componentes" }
+]
