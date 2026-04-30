@@ -8,6 +8,9 @@ function Form() {
   const [lista, setLista] = useState([]);
   const [mensaje, setMensaje] = useState(false);
   const [error, setError] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDesc, setEditDesc] = useState("");
 
   useEffect(() => {
     setLista(todosData);
@@ -64,6 +67,23 @@ function Form() {
     );
   };
 
+  const handleEdit = (tarea) => {
+    setEditId(tarea._id);
+    setEditTitle(tarea.title);
+    setEditDesc(tarea.desc);
+  };
+
+  const handleSave = (id) => {
+    setLista((prev) =>
+      prev.map((item) =>
+        item._id === id ? { ...item, title: editTitle, desc: editDesc } : item,
+      ),
+    );
+    setEditId(null);
+    setEditTitle("");
+    setEditDesc("");
+  };
+
   return (
     <>
       <form className="form" onSubmit={handleSubmit}>
@@ -79,7 +99,18 @@ function Form() {
 
       {error && <p className="error">{error}</p>}
 
-      <List lista={lista} onDelete={handleDelete} onDone = {handleDone} />
+      <List
+        lista={lista}
+        onDelete={handleDelete}
+        onDone={handleDone}
+        onEdit={handleEdit}
+        onSave={handleSave}
+        editId={editId}
+        editTitle={editTitle}
+        editDesc={editDesc}
+        setEditTitle={setEditTitle}
+        setEditDesc={setEditDesc}
+      />
 
       {mensaje && <p className="mensaje">Tarea añadida</p>}
 
